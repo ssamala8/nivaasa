@@ -1,0 +1,11 @@
+/* This file is for reusable SASS mixins.
+For example, you could add one for flexbox centering.
+*/
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// You can add more mixins here as your project grows.

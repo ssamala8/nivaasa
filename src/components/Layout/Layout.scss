@@ -1,0 +1,25 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+
+  // Theme styles
+  &.light {
+    background-color: #fff;
+    color: #333;
+  }
+
+  &.dark {
+    background-color: #282c34;
+    color: #f1f1f1;
+
+    main {
+      background-color: #20232a;
+    }
+  }
+
+  main {
+    flex-grow: 1;
+  }
+}

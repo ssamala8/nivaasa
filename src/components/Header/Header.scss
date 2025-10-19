@@ -1,0 +1,115 @@
+@use '../../styles/variables' as var;
+
+// Define a breakpoint. 768px is a common tablet size.
+$breakpoint-mobile: 768px;
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var.$dark-color;
+  color: var.$light-color;
+  position: relative; // Needed to position the mobile menu
+  min-height: 60px; // Give a fixed min-height
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var.$light-color;
+    z-index: 10; // Make sure logo stays on top
+  }
+
+  // --- Wrapper for navigation and theme toggle ---
+  .app-header__links {
+    display: flex;
+    align-items: center;
+
+    nav {
+      a {
+        color: var.$light-color;
+        margin: 0 1rem;
+        &:hover {
+          color: var.$primary-color;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .theme-toggle {
+    background-color: var.$primary-color;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+    margin-left: 1rem; // Add some space from nav
+
+    &:hover {
+      background-color: darken(var.$primary-color, 10%);
+    }
+  }
+
+  // --- Mobile Hamburger Button ---
+  .mobile-toggle {
+    display: none; // Hide on desktop by default
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10; // Make sure it stays on top
+  }
+
+  // --- MOBILE STYLES ---
+  @media (max-width: $breakpoint-mobile) {
+    // Show the hamburger button
+    .mobile-toggle {
+      display: block;
+    }
+
+    // Hide the desktop links
+    .app-header__links {
+      display: none; // Hide menu by default
+      position: absolute;
+      top: 100%; // Position right below the header
+      left: 0;
+      width: 100%;
+      background-color: var.$dark-color;
+      
+      // Make items stack vertically
+      flex-direction: column;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+      // When menu is open, show it
+      &.app-header__links--open {
+        display: flex;
+      }
+
+      nav {
+        display: flex; // <-- This was the fix
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        a {
+          margin: 0.75rem 0; // Space out links vertically
+          font-size: 1.2rem;
+        }
+      }
+
+      .theme-toggle {
+        margin-left: 0; // Remove desktop margin
+        margin-top: 1rem; // Add space above it
+      }
+    }
+  }
+}
