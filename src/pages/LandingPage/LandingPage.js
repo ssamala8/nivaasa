@@ -8,7 +8,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      <h1>Welcome to Your Large-Scale React App</h1>
+      <h1>Welcome to Nivaasa</h1>
       <p>This is the landing page. We are using React, SASS, Hooks, and Redux.</p>
       
       {/* Change this class name */}

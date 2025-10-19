@@ -4,7 +4,7 @@ import './Footer.scss';
 const Footer = () => {
   return (
     <footer className="app-footer">
-      <p>&copy; {new Date().getFullYear()} Large Scale Project. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} Nivaasa. All rights reserved.</p>
     </footer>
   );
 };
