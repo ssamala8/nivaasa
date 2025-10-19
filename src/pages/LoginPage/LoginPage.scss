@@ -1,0 +1,187 @@
+@use '../../styles/variables' as var;
+@use '../../styles/mixins' as mix;
+
+// --- Keyframe for form fade-in ---
+@keyframes form-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-container {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 120px); // Full height minus header/footer
+  margin: -2rem; // Expands to fill main's padding on desktop
+}
+
+// --- 1. The Left "Promo" Panel (Animated) ---
+.auth-promo-panel {
+  width: 45%;
+  padding: 4rem;
+  @include mix.flex-center;
+  flex-direction: column;
+  color: #fff; // Always white text
+  text-align: center;
+  
+  // Apply our light theme gradient by default
+  @include mix.aurora-gradient(var.$light-bg-start, var.$light-bg-end);
+  color: var.$light-text; // Use light text on light gradient
+
+  .layout.dark & {
+    // Apply dark theme gradient
+    @include mix.aurora-gradient(var.$dark-bg-start, var.$dark-bg-end);
+    color: var.$dark-text; // Use dark text on dark gradient
+  }
+  
+  .promo-content {
+    animation: form-fade-in 0.8s 0.2s ease-out backwards;
+    
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      line-height: 1.7;
+    }
+  }
+}
+
+// --- 2. The Right "Form" Panel (Clean) ---
+.auth-form-panel {
+  width: 55%;
+  padding: 4rem;
+  @include mix.flex-center;
+  
+  // Clean background colors
+  .layout.light & { background-color: #f9f9f9; }
+  .layout.dark & { background-color: #2c3e50; } // Use a very light-dark color
+  
+  .auth-form {
+    width: 100%;
+    max-width: 400px;
+    animation: form-fade-in 0.8s 0.4s ease-out backwards;
+    
+    h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border: 1px solid;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        
+        // Professional Input Styles
+        .layout.light & {
+          background-color: #fff;
+          border-color: #ddd;
+          &:focus {
+            border-color: var.$primary-color;
+            box-shadow: 0 0 0 3px rgba(var.$primary-color, 0.2);
+          }
+        }
+        .layout.dark & {
+          background-color: var.$dark-bg-end;
+          border-color: var.$dark-clay-bg;
+          color: var.$dark-text;
+          &:focus {
+            border-color: var.$primary-color;
+            box-shadow: 0 0 0 3px rgba(var.$primary-color, 0.3);
+          }
+        }
+      }
+    }
+
+    // --- New Button Style ---
+    .auth-button {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+      
+      // Bright, professional colors
+      background-color: var.$primary-color;
+      color: #fff;
+      
+      &:hover {
+        background-color: var.$primary-color-dark;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(var.$primary-color, 0.3);
+      }
+      &:active {
+        transform: translateY(0);
+      }
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .error-message {
+      color: #e74c3c;
+      background-color: rgba(231, 76, 60, 0.1);
+      border: 1px solid #e74c3c;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .auth-switch, .mock-info {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .mock-info {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-top: 1rem;
+    }
+  }
+}
+
+// --- Responsive: Stack panels on mobile ---
+@media (max-width: 900px) {
+  .auth-container {
+    flex-direction: column;
+    margin: 0; // <-- THIS IS THE FIX
+  }
+  
+  .auth-promo-panel,
+  .auth-form-panel {
+    width: 100%;
+    min-height: auto; // <-- THIS IS THE FIX
+    padding: 3rem 2rem;
+  }
+  
+  .auth-form-panel {
+     padding-top: 2rem;
+  }
+}

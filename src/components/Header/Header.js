@@ -2,28 +2,37 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../../features/theme/themeSlice';
+import { logout } from '../../features/auth/authSlice'; // 1. Import logout
 import './Header.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-// 1. Make sure you import faSun, faMoon, faBars, and faTimes
 import { faSun, faMoon, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const theme = useSelector((state) => state.theme.mode);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // 2. Get auth state from Redux
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const theme = useSelector((state) => state.theme.mode);
 
   const handleThemeToggle = () => {
     dispatch(toggleTheme());
   };
+  
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsMenuOpen(false); // Close menu on logout
+  };
 
-  // 2. This is the logic that was incorrect in your file.
-  // It MUST be faMoon for light mode, and faSun for dark mode.
   const themeIcon = theme === 'light' ? faMoon : faSun;
   
   const toggleMobileMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
   };
 
   return (
@@ -34,19 +43,26 @@ const Header = () => {
 
       <div className={`app-header__links ${isMenuOpen ? 'app-header__links--open' : ''}`}>
         <nav>
-          {/* Clicking a link should also close the mobile menu */}
-          <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
-          <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
-          <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+          <Link to="/" onClick={closeMenu}>Home</Link>
+          {/* 3. Conditional Links */}
+          {isAuthenticated ? (
+            <>
+              <span className="welcome-user">Hi, {user.name}</span>
+              <a href="#!" onClick={handleLogout} className="logout-link">Logout</a>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={closeMenu}>Login</Link>
+              <Link to="/signup" onClick={closeMenu}>Sign Up</Link>
+            </>
+          )}
         </nav>
 
-        {/* 3. This button renders the themeIcon (sun or moon) */}
         <button onClick={handleThemeToggle} className="theme-toggle">
           <FontAwesomeIcon icon={themeIcon} />
         </button>
       </div>
 
-      {/* 4. This button renders the mobile toggle (bars or times) */}
       <button className="mobile-toggle" onClick={toggleMobileMenu}>
         <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
       </button>
