@@ -1,7 +1,17 @@
-// Old code
-@import '../../styles/variables';
+@use '../../styles/variables' as var;
 
 .app-footer {
-  background-color: $dark-color;
-  // ...etc
+  text-align: center;
+  padding: 2rem;
+  margin-top: auto;
+  
+  // --- FLOATING FOOTER ---
+  background: transparent;
+  color: inherit; // Inherit from .layout
+  font-size: 0.9rem;
+  font-weight: 500;
+  
+  // Subtle shadow for readability
+  .layout.light & { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+  .layout.dark & { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
 }

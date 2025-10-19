@@ -1,22 +1,36 @@
+@use '../../styles/variables' as var;
+@use '../../styles/mixins' as mix;
+
 .layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.5s ease;
 
-  // Theme styles
+  // --- Light Theme (Default) ---
   &.light {
-    background-color: #fff;
-    color: #333;
+    @include mix.aurora-gradient(var.$light-bg-start, var.$light-bg-end);
+    color: var.$light-text;
+
+    // --- We only need to style .clay-card here ---
+    .clay-card {
+      @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light);
+    }
+    
+    a { color: var.$primary-color; }
   }
 
+  // --- Dark Theme ---
   &.dark {
-    background-color: #282c34;
-    color: #f1f1f1;
-
-    main {
-      background-color: #20232a;
+    @include mix.aurora-gradient(var.$dark-bg-start, var.$dark-bg-end);
+    color: var.$dark-text;
+    
+    // --- We only need to style .clay-card here ---
+    .clay-card {
+      @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark);
     }
+    
+    a { color: var.$primary-color; }
   }
 
   main {

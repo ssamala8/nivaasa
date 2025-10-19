@@ -1,16 +1,18 @@
+// src/pages/LandingPage/LandingPage.js
+
 import React, { useState } from 'react';
 import './LandingPage.scss';
 
 const LandingPage = () => {
-  // Example of using a hook (useState)
   const [count, setCount] = useState(0);
 
   return (
     <div className="landing-page">
-      <h1>Welcome to Your Nivaasa</h1>
+      <h1>Welcome to Your Large-Scale React App</h1>
       <p>This is the landing page. We are using React, SASS, Hooks, and Redux.</p>
       
-      <div className="counter">
+      {/* Change this class name */}
+      <div className="counter clay-card">
         <h3>Example Hook (useState):</h3>
         <p>You clicked {count} times</p>
         <button onClick={() => setCount(count + 1)}>
@@ -18,7 +20,8 @@ const LandingPage = () => {
         </button>
       </div>
 
-      <div className="info-box">
+      {/* And change this class name */}
+      <div className="info-box clay-card">
         <h3>Project Features:</h3>
         <ul>
           <li>Scalable file structure</li>

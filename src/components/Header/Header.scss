@@ -1,34 +1,40 @@
 @use '../../styles/variables' as var;
+@use '../../styles/mixins' as mix;
 
-// Define a breakpoint. 768px is a common tablet size.
 $breakpoint-mobile: 768px;
 
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: var.$dark-color;
-  color: var.$light-color;
-  position: relative; // Needed to position the mobile menu
-  min-height: 60px; // Give a fixed min-height
+  padding: 1.5rem 2rem;
+  
+  // --- FLOATING HEADER ---
+  background: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  
+  // Subtle shadow for readability on gradient
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
   .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var.$light-color;
-    z-index: 10; // Make sure logo stays on top
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: inherit; // Inherit color from .layout
   }
 
-  // --- Wrapper for navigation and theme toggle ---
   .app-header__links {
     display: flex;
     align-items: center;
 
     nav {
       a {
-        color: var.$light-color;
+        color: inherit;
         margin: 0 1rem;
+        font-weight: 500;
+        transition: color 0.2s;
+        
         &:hover {
           color: var.$primary-color;
           text-decoration: none;
@@ -38,77 +44,90 @@ $breakpoint-mobile: 768px;
   }
 
   .theme-toggle {
-    background-color: var.$primary-color;
-    color: white;
+    // Apply clay effect directly
+    .layout.light & {
+      @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light);
+    }
+    .layout.dark & {
+      @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark);
+    }
+    
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.2s;
-    margin-left: 1rem; // Add some space from nav
+    @include mix.flex-center;
+    transition: all 0.2s ease;
+    margin-left: 1rem;
+    
+    color: var.$primary-color;
+    .layout.dark & { color: var.$primary-color; }
 
     &:hover {
-      background-color: darken(var.$primary-color, 10%);
+      transform: scale(1.1);
+    }
+    &:active {
+      transform: scale(0.95);
     }
   }
 
-  // --- Mobile Hamburger Button ---
   .mobile-toggle {
-    display: none; // Hide on desktop by default
+    display: none;
     background: none;
     border: none;
-    color: white;
+    color: inherit;
     font-size: 1.5rem;
     cursor: pointer;
-    z-index: 10; // Make sure it stays on top
+    z-index: 10;
   }
 
   // --- MOBILE STYLES ---
   @media (max-width: $breakpoint-mobile) {
-    // Show the hamburger button
     .mobile-toggle {
       display: block;
     }
 
-    // Hide the desktop links
     .app-header__links {
-      display: none; // Hide menu by default
+      display: none;
       position: absolute;
-      top: 100%; // Position right below the header
-      left: 0;
-      width: 100%;
-      background-color: var.$dark-color;
+      top: 90%;
+      left: 2.5%;
+      width: 95%;
       
-      // Make items stack vertically
+      // --- THIS IS THE FIX ---
+      // Replace @extend with the mixin directly
+      .layout.light & {
+        @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light);
+      }
+      .layout.dark & {
+        @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark);
+      }
+      // -----------------------
+      
       flex-direction: column;
-      padding: 1rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
 
-      // When menu is open, show it
       &.app-header__links--open {
         display: flex;
       }
 
       nav {
-        display: flex; // <-- This was the fix
+        display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
 
         a {
-          margin: 0.75rem 0; // Space out links vertically
+          margin: 0.75rem 0;
           font-size: 1.2rem;
         }
       }
 
       .theme-toggle {
-        margin-left: 0; // Remove desktop margin
-        margin-top: 1rem; // Add space above it
+        margin-left: 0;
+        margin-top: 1rem;
       }
     }
   }

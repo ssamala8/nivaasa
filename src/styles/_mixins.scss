@@ -1,6 +1,4 @@
-/* This file is for reusable SASS mixins.
-For example, you could add one for flexbox centering.
-*/
+@use 'variables' as var;
 
 @mixin flex-center {
   display: flex;
@@ -8,4 +6,24 @@ For example, you could add one for flexbox centering.
   align-items: center;
 }
 
-// You can add more mixins here as your project grows.
+// --- NEW CLAY EFFECT MIXIN ---
+@mixin clay-effect($bg, $shadow) {
+  background: $bg;
+  border-radius: 20px;
+  box-shadow: $shadow;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+// --- NEW AURORA BACKGROUND MIXIN ---
+@mixin aurora-gradient($start, $end) {
+  background: linear-gradient(135deg, $start, $end);
+  background-size: 400% 400%;
+  animation: moveGradient 15s ease infinite;
+}
+
+// Reusable animation mixin
+@mixin fade-in-up($duration: 0.5s, $delay: 0s) {
+  animation: fade-in-up $duration ease-out $delay forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}

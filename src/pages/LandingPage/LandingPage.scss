@@ -1,9 +1,94 @@
-// Old code
-@import '../../styles/variables';
+@use '../../styles/variables' as var;
+@use '../../styles/mixins' as mix;
 
 .landing-page {
+  text-align: center;
+  padding: 2rem 0;
+  
+  // --- Add perspective for 3D tilt ---
+  perspective: 1000px;
+
   h1 {
-    color: $primary-color;
+    font-size: 3rem;
+    font-weight: 700;
+    @include mix.fade-in-up(0.6s, 0.1s);
+    
+    // --- New Sunrise Gradient Text ---
+    background: linear-gradient(90deg, var.$primary-color, var.$primary-color-dark);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    .layout.dark & {
+      background: linear-gradient(90deg, var.$primary-color, #ffafbd);
+      -webkit-background-clip: text;
+    }
   }
-  // ...etc
+
+  p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0 2rem 0;
+    @include mix.fade-in-up(0.6s, 0.2s);
+  }
+
+  // --- This is our new Card style ---
+  .clay-card {
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 500px;
+    
+    // --- 3D TILT ANIMATION ---
+    &:hover {
+      transform: rotateX(5deg) rotateY(5deg) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .counter {
+    @include mix.fade-in-up(0.6s, 0.3s);
+    
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var.$primary-color;
+      border: none;
+      margin-top: 1rem;
+      
+      // --- THIS IS THE FIX ---
+      // Replace @extend with the mixin directly
+      .layout.light & {
+        @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light);
+      }
+      .layout.dark & {
+        @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark);
+      }
+      // -----------------------
+      
+      .layout.dark & { color: #fff; }
+      
+      // --- SQUISH ANIMATION ---
+      &:active {
+        transform: scale(0.95);
+        // Re-adjust shadow on press
+        .layout.light & { box-shadow: inset 2px 2px 5px #d9d9d9, inset -2px -2px 5px #ffffff; }
+        .layout.dark & { box-shadow: inset 2px 2px 5px #223140, inset -2px -2px 5px #364b60; }
+      }
+    }
+  }
+
+  .info-box {
+    text-align: left;
+    @include mix.fade-in-up(0.6s, 0.4s);
+
+    ul {
+      list-style-type: '🚀';
+      padding-left: 2rem;
+      
+      li {
+        margin-bottom: 0.75rem;
+        padding-left: 0.5rem;
+      }
+    }
+  }
 }

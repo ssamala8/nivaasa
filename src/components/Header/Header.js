@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <header className="app-header">
       <Link to="/" className="logo">
-        MyLogo
+        Nivaasa
       </Link>
 
       <div className={`app-header__links ${isMenuOpen ? 'app-header__links--open' : ''}`}>
