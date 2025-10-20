@@ -1,0 +1,71 @@
+@use '../../styles/variables' as var;
+
+// Register the --angle property for smooth animation in Chrome/Edge
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.chromatic-spinner {
+  // --- Customizable variables ---
+  --spinner-size: 60px;
+  --spinner-stroke: 4px;
+  // Use our app's primary color
+  --color-1: #{var.$primary-color}; 
+  // A complementary color
+  --color-2: #3498db; 
+  --color-3: #9b59b6;
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border-radius: 50%;
+  
+  // The magic is in the gradient!
+  background: conic-gradient(
+    from var(--angle),
+    var(--color-1),
+    var(--color-2) 30%,
+    var(--color-3) 60%,
+    transparent 80%,
+    transparent
+  );
+
+  // Mask creates the ring shape
+  mask: radial-gradient(
+    transparent calc(var(--spinner-size) / 2 - var(--spinner-stroke)), 
+    #000 0
+  );
+  
+  // Apply multiple animations
+  animation: 
+    spin 1.2s infinite linear,
+    change-angle 3s infinite linear alternate;
+}
+
+.spinner-text {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+// Keyframe to spin the entire element
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Keyframe to animate the gradient's starting angle
+@keyframes change-angle {
+  to {
+    --angle: 360deg;
+  }
+}

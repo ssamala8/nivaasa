@@ -171,17 +171,27 @@
 @media (max-width: 900px) {
   .auth-container {
     flex-direction: column;
-    margin: 0; // <-- THIS IS THE FIX
+    margin: 0; // Resets the negative margin
   }
   
   .auth-promo-panel,
   .auth-form-panel {
     width: 100%;
-    min-height: auto; // <-- THIS IS THE FIX
+    min-height: auto;
     padding: 3rem 2rem;
   }
   
   .auth-form-panel {
      padding-top: 2rem;
+  }
+}
+
+// --- Validation Error Style ---
+.form-group {
+  .error-text {
+    color: #e74c3c; // A strong red for errors
+    font-size: 0.875rem;
+    display: block;
+    margin-top: 0.25rem;
   }
 }

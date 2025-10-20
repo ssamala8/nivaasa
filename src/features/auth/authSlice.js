@@ -2,13 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as authService from '../../services/authService';
 
 // --- Async Thunks (for API calls) ---
-
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await authService.login(email, password);
-      localStorage.setItem('user', JSON.stringify(response.data)); // Save user to local storage
+      // UPDATED
+      sessionStorage.setItem('user', JSON.stringify(response.data)); 
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -21,7 +21,8 @@ export const signUpUser = createAsyncThunk(
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
       const response = await authService.signUp(name, email, password);
-      localStorage.setItem('user', JSON.stringify(response.data)); // Auto-login after sign up
+      // UPDATED
+      sessionStorage.setItem('user', JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -29,8 +30,9 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
-// --- Get user from local storage (if they are already logged in) ---
-const user = JSON.parse(localStorage.getItem('user'));
+// --- Get user from session storage ---
+// UPDATED
+const user = JSON.parse(sessionStorage.getItem('user'));
 
 const initialState = {
   user: user ? user : null,
@@ -42,17 +44,17 @@ const initialState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  // --- Standard Reducers ---
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('user'); // Remove from local storage
+      // UPDATED
+      sessionStorage.removeItem('user');
       state.user = null;
       state.isAuthenticated = false;
       state.error = null;
     },
   },
-  // --- Extra Reducers (for async thunks) ---
   extraReducers: (builder) => {
+    // ... (extraReducers logic remains exactly the same)
     builder
       // Login
       .addCase(loginUser.pending, (state) => {
@@ -66,7 +68,7 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload; // This is the error message
+        state.error = action.payload;
       })
       // Sign Up
       .addCase(signUpUser.pending, (state) => {
@@ -86,5 +88,4 @@ export const authSlice = createSlice({
 });
 
 export const { logout } = authSlice.actions;
-
 export default authSlice.reducer;

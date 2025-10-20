@@ -1,94 +1,208 @@
 @use '../../styles/variables' as var;
 @use '../../styles/mixins' as mix;
 
-.landing-page {
-  text-align: center;
-  padding: 2rem 0;
+// --- Global Homepage Styles ---
+.homepage-content {
+  width: 100%;
   
-  // --- Add perspective for 3D tilt ---
-  perspective: 1000px;
-
-  h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    @include mix.fade-in-up(0.6s, 0.1s);
-    
-    // --- New Sunrise Gradient Text ---
-    background: linear-gradient(90deg, var.$primary-color, var.$primary-color-dark);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    
-    .layout.dark & {
-      background: linear-gradient(90deg, var.$primary-color, #ffafbd);
-      -webkit-background-clip: text;
+  // A helper to create clean content sections
+  section {
+    padding: 5rem 2rem;
+    // Add a subtle separator line between sections
+    border-bottom: 1px solid;
+    .layout.light & { border-color: #e0e0e0; }
+    .layout.dark & { border-color: rgba(255, 255, 255, 0.1); }
+    &:last-child {
+      border-bottom: none;
     }
   }
 
-  p {
-    font-size: 1.2rem;
-    margin: 0.5rem 0 2rem 0;
+  // Center all section headlines
+  .section-headline {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    @include mix.fade-in-up(0.6s, 0.1s);
+  }
+
+  // Center all section sub-headlines
+  .section-subheadline {
+    font-size: 1.1rem;
+    color: inherit;
+    opacity: 0.8;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem auto;
+    line-height: 1.7;
     @include mix.fade-in-up(0.6s, 0.2s);
   }
+}
 
-  // --- This is our new Card style ---
-  .clay-card {
-    margin: 2rem auto;
-    padding: 2rem;
-    max-width: 500px;
-    
-    // --- 3D TILT ANIMATION ---
+// --- Reusable Button Styles ---
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 25px; // Pill shape
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  &--primary {
+    color: #fff;
+    border-color: var.$primary-color;
+
     &:hover {
-      transform: rotateX(5deg) rotateY(5deg) scale(1.03);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      background-color: var.$primary-color-dark;
+      border-color: var.$primary-color-dark;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(var.$primary-color, 0.3);
     }
   }
 
-  .counter {
-    @include mix.fade-in-up(0.6s, 0.3s);
+  &--secondary {
+    background-color: transparent;
+    color: var.$primary-color;
+    border-color: var.$primary-color;
     
-    button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: var.$primary-color;
-      border: none;
-      margin-top: 1rem;
-      
-      // --- THIS IS THE FIX ---
-      // Replace @extend with the mixin directly
-      .layout.light & {
-        @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light);
-      }
-      .layout.dark & {
-        @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark);
-      }
-      // -----------------------
-      
-      .layout.dark & { color: #fff; }
-      
-      // --- SQUISH ANIMATION ---
-      &:active {
-        transform: scale(0.95);
-        // Re-adjust shadow on press
-        .layout.light & { box-shadow: inset 2px 2px 5px #d9d9d9, inset -2px -2px 5px #ffffff; }
-        .layout.dark & { box-shadow: inset 2px 2px 5px #223140, inset -2px -2px 5px #364b60; }
+    .layout.dark & { 
+      color: #fff; 
+      border-color: #fff; 
+    }
+
+    &:hover {
+      background-color: var.$primary-color;
+      color: #fff;
+      border-color: var.$primary-color;
+      .layout.dark & { 
+        background-color: #fff; 
+        color: var.$dark-text; 
+        border-color: #fff;
       }
     }
   }
+  
+  &--large {
+    font-size: 1.1rem;
+    padding: 1rem 2.5rem;
+  }
+}
 
-  .info-box {
-    text-align: left;
-    @include mix.fade-in-up(0.6s, 0.4s);
+// --- 1. Hero Section ---
+.hero-section {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
-    ul {
-      list-style-type: '🚀';
-      padding-left: 2rem;
-      
-      li {
-        margin-bottom: 0.75rem;
-        padding-left: 0.5rem;
-      }
+  .hero-content {
+    @include mix.fade-in-up(0.6s, 0.1s);
+  }
+
+  .hero-headline {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .hero-subheadline {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 1.5rem auto 2.5rem auto;
+    opacity: 0.9;
+  }
+
+  .hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    @include mix.fade-in-up(0.6s, 0.3s);
+  }
+}
+
+// --- 2. Problem Section ---
+.problem-section {
+  .layout.light & { background-color: #fafafa; }
+  .layout.dark & { background-color: var.$dark-bg-end; }
+}
+
+// --- 3. Features Section ---
+.features-section {
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+}
+
+// --- 4. How It Works Section ---
+.how-it-works-section {
+  .layout.light & { background-color: #fafafa; }
+  .layout.dark & { background-color: var.$dark-bg-end; }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .step-card {
+    text-align: center;
+    padding: 2rem;
+    
+    .step-number {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var.$primary-color;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      @include mix.flex-center;
+      margin: 0 auto 1.5rem auto;
+      box-shadow: 0 4px 12px rgba(var.$primary-color, 0.3);
     }
+    
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+}
+
+// --- 5. Pricing Section ---
+.pricing-section {
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: stretch; // Makes cards equal height
+  }
+}
+
+// --- 6. Final CTA Section ---
+.cta-section {
+  text-align: center;
+  
+  .layout.light & { background-color: var.$light-clay-bg; }
+  .layout.dark & { background-color: var.$dark-bg-end; }
+  
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin: 1rem auto 2.5rem auto;
+    max-width: 600px;
   }
 }

@@ -1,0 +1,60 @@
+@use '../../styles/variables' as var;
+
+.data-table-wrapper {
+  padding: 0; // The card will have no padding
+  overflow-x: auto; // Allow horizontal scroll on small screens
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead tr {
+    text-align: left;
+    .layout.light & { border-bottom: 2px solid #eee; }
+    .layout.dark & { border-bottom: 2px solid var.$dark-bg-end; }
+  }
+
+  th, td {
+    padding: 1rem 1.5rem;
+  }
+
+  tbody tr {
+    transition: background-color 0.2s;
+    .layout.light & { border-bottom: 1px solid #f4f4f4; }
+    .layout.dark & { border-bottom: 1px solid var.$dark-bg-end; }
+    
+    &:last-of-type {
+      border-bottom: 0;
+    }
+  }
+}
+
+// Responsive: Stack table on mobile
+@media (max-width: 768px) {
+  .data-table {
+    thead { display: none; } // Hide headers
+    
+    tr {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    
+    td {
+      display: flex;
+      justify-content: space-between;
+      text-align: right;
+      border-bottom: 1px dotted;
+
+      .layout.light & { border-color: #ddd; }
+      .layout.dark & { border-color: var.$dark-clay-bg; }
+      
+      &::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        padding-right: 1rem;
+      }
+    }
+  }
+}

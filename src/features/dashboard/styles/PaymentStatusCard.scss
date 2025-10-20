@@ -1,0 +1,32 @@
+@use '../../../styles/variables' as var;
+
+.payment-card {
+  .payment-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .status-icon {
+    font-size: 2.5rem;
+  }
+  .status-text h4 {
+    margin: 0;
+  }
+  .pay-now-button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var.$primary-color;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    &:hover {
+      background-color: var.$primary-color-dark;
+    }
+  }
+  &--paid .status-icon { color: #2ecc71; }
+  &--pending .status-icon { color: #f39c12; }
+}

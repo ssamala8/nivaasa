@@ -1,19 +1,40 @@
-import React from 'react';
+// 1. Import lazy and Suspense from React
+import React, { lazy, Suspense } from 'react'; 
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout/Layout';
+import Layout from './layout/Layout/Layout';
+import ProtectedRoute from './router/ProtectedRoute';
+import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay';
+// --- Public Pages (load immediately) ---
 import LandingPage from './pages/LandingPage/LandingPage';
-import LoginPage from './pages/LoginPage/LoginPage'; // 1. Import Login
-import SignUpPage from './pages/SignUpPage/SignUpPage'; // 2. Import Sign Up
+import LoginPage from './pages/LoginPage/LoginPage';
+import SignUpPage from './pages/SignUpPage/SignUpPage';
+
+// --- Protected Pages (load on demand) ---
+// 3. Use React.lazy to import the DashboardPage
+const DashboardPage = lazy(() => import('./pages/DashboardPage/DashboardPage'));
 
 function App() {
   return (
     <Layout>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} /> {/* 3. Add Login Route */}
-        <Route path="/signup" element={<SignUpPage />} /> {/* 4. Add Sign Up Route */}
-        {/* <Route path="/about" element={<AboutPage />} /> */}
-      </Routes>
+      {/* 4. Wrap your Routes in a Suspense component */}
+      <Suspense fallback={<LoadingOverlay text="Loading Page..." />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+
+          {/* Protected Routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </Suspense>
     </Layout>
   );
 }

@@ -1,0 +1,15 @@
+@use '../../../styles/variables' as var;
+
+.dashboard-card {
+  padding: 1.5rem;
+  
+  &__title {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    border-bottom: 1px solid;
+    padding-bottom: 0.75rem;
+    
+    .layout.light & { border-color: #eee; }
+    .layout.dark & { border-color: rgba(255, 255, 255, 0.1); }
+  }
+}
