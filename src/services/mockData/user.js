@@ -25,7 +25,7 @@ export const MOCK_USERS = {
 
 // Update credentials to check against
 export const MOCK_CREDENTIALS = {
-  owner: { email: 'owner@test.com', password: 'password123' },
-  tenant: { email: 'tenant@test.com', password: 'password123' },
-  admin: { email: 'admin@test.com', password: 'password123' },
+  owner: { email: 'owner@test.com', password: 'Test123' },
+  tenant: { email: 'tenant@test.com', password: 'Test123' },
+  admin: { email: 'admin@test.com', password: 'Test123' },
 };
