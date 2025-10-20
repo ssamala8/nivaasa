@@ -18,7 +18,7 @@ export const MOCK_USERS = {
     id: '3',
     name: 'Super Admin',
     email: 'admin@test.com',
-    role: 'admin', // <-- Add role
+    role: 'admin',
     token: 'mock-jwt-token-admin-789',
   },
 };
