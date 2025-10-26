@@ -4,20 +4,15 @@
 // --- Global Homepage Styles ---
 .homepage-content {
   width: 100%;
-  
-  // A helper to create clean content sections
+
   section {
     padding: 5rem 2rem;
-    // Add a subtle separator line between sections
     border-bottom: 1px solid;
-    .layout.light & { border-color: #e0e0e0; }
-    .layout.dark & { border-color: rgba(255, 255, 255, 0.1); }
-    &:last-child {
-      border-bottom: none;
-    }
+    .layout.light & { border-color: var.$light-border; }
+    .layout.dark & { border-color: var.$dark-border; }
+    &:last-child { border-bottom: none; }
   }
 
-  // Center all section headlines
   .section-headline {
     font-size: 2.5rem;
     font-weight: 700;
@@ -26,7 +21,6 @@
     @include mix.fade-in-up(0.6s, 0.1s);
   }
 
-  // Center all section sub-headlines
   .section-subheadline {
     font-size: 1.1rem;
     color: inherit;
@@ -39,58 +33,13 @@
   }
 }
 
-// --- Reusable Button Styles ---
+// --- Reusable Button Styles (Defined here for homepage context) ---
+// Note: Consider moving these to a global button file if used more widely
 .btn {
-  display: inline-block;
-  padding: 0.75rem 1.75rem;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 25px; // Pill shape
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: 2px solid transparent;
-
-  &--primary {
-    color: #fff;
-    border-color: var.$primary-color;
-
-    &:hover {
-      background-color: var.$primary-color-dark;
-      border-color: var.$primary-color-dark;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(var.$primary-color, 0.3);
-    }
-  }
-
-  &--secondary {
-    background-color: transparent;
-    color: var.$primary-color;
-    border-color: var.$primary-color;
-    
-    .layout.dark & { 
-      color: #fff; 
-      border-color: #fff; 
-    }
-
-    &:hover {
-      background-color: var.$primary-color;
-      color: #fff;
-      border-color: var.$primary-color;
-      .layout.dark & { 
-        background-color: #fff; 
-        color: var.$dark-text; 
-        border-color: #fff;
-      }
-    }
-  }
-  
-  &--large {
-    font-size: 1.1rem;
-    padding: 1rem 2.5rem;
-  }
+  // Styles already defined in components/Button/Button.scss
+  // We can add specific homepage button overrides here if needed
 }
+
 
 // --- 1. Hero Section ---
 .hero-section {
@@ -99,52 +48,25 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-
-  .hero-content {
-    @include mix.fade-in-up(0.6s, 0.1s);
-  }
-
-  .hero-headline {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .hero-subheadline {
-    font-size: 1.25rem;
-    max-width: 700px;
-    margin: 1.5rem auto 2.5rem auto;
-    opacity: 0.9;
-  }
-
-  .hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    @include mix.fade-in-up(0.6s, 0.3s);
-  }
+  // Maybe add a subtle background pattern or image if desired
 }
 
-// --- 2. Problem Section ---
-.problem-section {
-  .layout.light & { background-color: #fafafa; }
-  .layout.dark & { background-color: var.$dark-bg-end; }
-}
+// ... (Rest of LandingPage.scss remains the same, using the new .btn styles automatically) ...
 
 // --- 3. Features Section ---
 .features-section {
   .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    gap: 2rem; // Increased gap
     margin-top: 3rem;
   }
 }
 
 // --- 4. How It Works Section ---
 .how-it-works-section {
-  .layout.light & { background-color: #fafafa; }
-  .layout.dark & { background-color: var.$dark-bg-end; }
+  .layout.light & { background-color: rgba(var.$light-card-bg, 0.5); } // Subtle background tint
+  .layout.dark & { background-color: rgba(var.$dark-card-bg, 0.3); }
 
   .steps-grid {
     display: grid;
@@ -156,7 +78,12 @@
   .step-card {
     text-align: center;
     padding: 2rem;
-    
+    @include mix.fade-in-up(0.5s); // Add animation to steps
+    // Stagger animation
+    &:nth-child(1) { animation-delay: 0.2s; }
+    &:nth-child(2) { animation-delay: 0.3s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+
     .step-number {
       width: 50px;
       height: 50px;
@@ -167,13 +94,11 @@
       font-weight: 700;
       @include mix.flex-center;
       margin: 0 auto 1.5rem auto;
-      box-shadow: 0 4px 12px rgba(var.$primary-color, 0.3);
+      box-shadow: 0 5px 15px rgba(var.$primary-color, 0.4);
     }
-    
-    h3 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
+
+    h3 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    p { opacity: 0.8; }
   }
 }
 
@@ -183,26 +108,16 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    align-items: stretch; // Makes cards equal height
+    align-items: stretch;
   }
 }
 
 // --- 6. Final CTA Section ---
 .cta-section {
   text-align: center;
-  
-  .layout.light & { background-color: var.$light-clay-bg; }
-  .layout.dark & { background-color: var.$dark-bg-end; }
-  
-  h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-  }
-  
-  p {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    margin: 1rem auto 2.5rem auto;
-    max-width: 600px;
-  }
+  .layout.light & { background-color: var.$light-card-bg; } // Use card bg
+  .layout.dark & { background-color: var.$dark-card-bg; }
+
+  h2 { font-size: 2.5rem; font-weight: 700; }
+  p { font-size: 1.1rem; opacity: 0.8; margin: 1rem auto 2.5rem auto; max-width: 600px; }
 }

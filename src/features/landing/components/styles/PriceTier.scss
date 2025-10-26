@@ -1,21 +1,30 @@
+@use '../../../../styles/variables' as var; // <-- ADD THIS LINE
+@use '../../../../styles/mixins' as mix;
+
 .price-tier {
   padding: 2.5rem 2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform var.$base-transition, box-shadow var.$base-transition;
+  @include mix.fade-in-up(0.5s); // Add fade-in animation
 
-  &__title {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
+   // Stagger animation delay
+  &:nth-child(1) { animation-delay: 0.2s; }
+  &:nth-child(2) { animation-delay: 0.3s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+
+
+  &:hover {
+    transform: translateY(-8px);
+    .layout.light & { box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+    .layout.dark & { box-shadow: 0 12px 25px rgba(0,0,0,0.25); }
   }
 
-  &__description {
-    font-size: 1rem;
-    opacity: 0.8;
-    margin-bottom: 2rem;
-    flex-grow: 1; // Makes cards in a row equal height
-  }
+  &__title { font-size: 1.75rem; margin-bottom: 1rem; }
+  &__description { font-size: 1rem; opacity: 0.8; margin-bottom: 2rem; flex-grow: 1; }
+
+  // Ensure button spacing
+  .btn { margin-top: auto; } // Pushes button to bottom
 }
-
-// We'll define the .btn styles in the main LandingPage.scss

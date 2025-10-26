@@ -5,18 +5,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: all 0.5s ease;
+  transition: all 0.5s ease; // Keep global transition
 
-  // --- Light Theme (Default) ---
+  // --- Light Theme ---
   &.light {
     @include mix.aurora-gradient(var.$light-bg-start, var.$light-bg-end);
     color: var.$light-text;
 
-    // --- We only need to style .clay-card here ---
-    .clay-card {
-      @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light);
+    .clay-card { // Define global clay card style for light mode
+      @include mix.clay-effect(var.$light-card-bg, var.$clay-shadow-light);
     }
-    
     a { color: var.$primary-color; }
   }
 
@@ -24,16 +22,16 @@
   &.dark {
     @include mix.aurora-gradient(var.$dark-bg-start, var.$dark-bg-end);
     color: var.$dark-text;
-    
-    // --- We only need to style .clay-card here ---
-    .clay-card {
-      @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark);
+
+    .clay-card { // Define global clay card style for dark mode
+      @include mix.clay-effect(var.$dark-card-bg, var.$clay-shadow-dark);
     }
-    
     a { color: var.$primary-color; }
   }
 
   main {
     flex-grow: 1;
+    // Allow main content to potentially scroll under sticky header
+    // padding-top: 77px; // Adjust if header height changes
   }
 }

@@ -1,0 +1,139 @@
+@use '../../styles/variables' as var;
+@use '../../styles/mixins' as mix;
+
+// --- Admin Specific Variables (Overrides) ---
+$admin-primary-color: #5dade2; // Soft Blue
+$admin-light-bg: #f4f7f6;      // Very light grey-blue
+$admin-dark-bg: #212f3c;       // Darker blue-grey
+$admin-card-bg-light: #ffffff;
+$admin-card-bg-dark: #2c3e50;
+$admin-text-light: var.$dark-text; // Dark text on light bg
+$admin-text-dark: var.$dark-text;  // Light text on dark bg
+
+.admin-layout {
+  display: flex;
+  margin: -2rem; 
+  min-height: calc(100vh - 77px); // Adjust based on your header height if needed
+
+  // Apply admin-specific background
+  .layout.light & { background-color: $admin-light-bg; }
+  .layout.dark & { background-color: $admin-dark-bg; }
+}
+
+.admin-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease;
+
+  .layout.light & { 
+    background-color: $admin-card-bg-light; 
+    border-right: 1px solid #e0e4e7;
+  }
+  .layout.dark & { 
+    background-color: $admin-card-bg-dark;
+    border-right: 1px solid lighten($admin-card-bg-dark, 5%);
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid;
+    .layout.light & { border-color: #e0e4e7; }
+    .layout.dark & { border-color: lighten($admin-card-bg-dark, 5%); }
+    
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      text-align: center;
+      font-weight: 600;
+    }
+  }
+
+  .sidebar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0; // Add padding top/bottom
+    
+    li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.5rem; // Slightly adjust padding
+      margin: 0.25rem 0.75rem; // Add margin for spacing & active state
+      text-decoration: none;
+      font-weight: 500;
+      color: inherit;
+      opacity: 0.7; // Dim inactive links slightly
+      transition: all 0.25s ease;
+      border-radius: 8px; // Rounded corners for links
+
+      svg { width: 20px; text-align: center; margin-right: 0.25rem; }
+      
+      &:hover {
+        opacity: 1;
+        background-color: rgba($admin-primary-color, 0.1);
+        color: $admin-primary-color;
+      }
+      
+      // --- Beautiful Active Link Style ---
+      &.active {
+        opacity: 1;
+        font-weight: 600;
+        color: #fff; // White text on active
+        background-color: $admin-primary-color; 
+        box-shadow: 0 4px 10px rgba($admin-primary-color, 0.3);
+      }
+    }
+  }
+}
+
+.admin-content {
+  flex-grow: 1;
+  padding: 2.5rem; // Increased padding
+  overflow-y: auto;
+}
+
+// Responsive - Improved Mobile Sidebar
+@media (max-width: 900px) {
+  .admin-layout {
+    flex-direction: column;
+    margin: 0;
+  }
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    // Add subtle shadow when scrolling horizontally
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+    .layout.dark & { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    
+    .sidebar-header { display: none; }
+    .sidebar-nav { display: flex; padding: 0.5rem; } // Reduce padding
+    
+    li a {
+      margin: 0.25rem;
+      padding: 0.75rem 1rem; // Adjust padding
+      border-radius: 6px;
+      
+      span { display: none; } // Hide text on mobile nav items
+      svg { margin-right: 0; } // Remove icon margin
+
+      // Active state - bottom border
+      &.active {
+        background-color: transparent; // Remove background
+        color: $admin-primary-color; // Use primary color
+        box-shadow: none;
+        border-bottom: 3px solid $admin-primary-color; // Indicate active with border
+        border-radius: 0; // Remove radius for border
+      }
+       &:hover {
+         background-color: rgba($admin-primary-color, 0.1);
+      }
+    }
+  }
+  .admin-content {
+    padding: 1.5rem;
+  }
+}

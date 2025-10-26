@@ -1,8 +1,38 @@
 @use '../../styles/variables' as var;
+@use "sass:color";
+
+// Use variables directly from _variables.scss via 'var' namespace
+$admin-primary-color: var.$primary-color;
+$admin-light-bg: var.$light-bg;
+$admin-dark-bg: var.$dark-bg;
+$admin-card-bg-light: var.$light-card-bg;
+$admin-card-bg-dark: var.$dark-card-bg;
+$admin-text-light: var.$light-text; // Dark text
+$admin-text-dark: var.$dark-text;   // Light text
+
+@keyframes fade-slide-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .data-table-wrapper {
-  padding: 0; // The card will have no padding
-  overflow-x: auto; // Allow horizontal scroll on small screens
+  border-radius: 12px;
+  overflow: hidden; // Keep clipping for radius
+  margin-bottom: 2.5rem;
+  margin-top: 2.5rem;
+
+  .layout.light & { background-color: $admin-card-bg-light; box-shadow: 0 5px 20px rgba(0,0,0,0.06); }
+  .layout.dark & { background-color: $admin-card-bg-dark; box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+
+  // --- Ensure wrapper itself doesn't hide content unexpectedly ---
+  min-height: 100px; // Add a minimum height just in case
+
+  overflow-x: auto; // Keep horizontal scroll
+  // Scrollbar styles...
+  &::-webkit-scrollbar { height: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+  .layout.dark &::-webkit-scrollbar-thumb { background: color.adjust($admin-card-bg-dark, $lightness: 15%); }
 }
 
 .data-table {
@@ -11,50 +41,106 @@
 
   thead tr {
     text-align: left;
-    .layout.light & { border-bottom: 2px solid #eee; }
-    .layout.dark & { border-bottom: 2px solid var.$dark-bg-end; }
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    position: sticky; top: 0; // Keep sticky header
+    z-index: 1;
+
+    // Set header text color explicitly
+    .layout.light & { background: $admin-card-bg-light; border-bottom: 2px solid var.$light-border; color: $admin-text-light; }
+    .layout.dark & { background: $admin-card-bg-dark; border-bottom: 2px solid var.$dark-border; color: $admin-text-dark; }
   }
 
-  th, td {
-    padding: 1rem 1.5rem;
+  th { padding: 1rem 1.5rem; font-weight: 600; opacity: 0.8; white-space: nowrap; }
+
+  td {
+     padding: 1rem 1.5rem;
+     vertical-align: middle;
+     // --- FIX: Apply color based on layout, remove !important if possible ---
+     // Inherit should work if .admin-content color is set, but let's be explicit
+     .layout.light & { color: $admin-text-light; } // Dark text
+     .layout.dark & { color: $admin-text-dark; }   // Light text
+     // --- END FIX ---
+     // Ensure content isn't hidden
+     overflow: visible;
+     white-space: normal; // Allow text wrapping
   }
 
   tbody tr {
-    transition: background-color 0.2s;
-    .layout.light & { border-bottom: 1px solid #f4f4f4; }
-    .layout.dark & { border-bottom: 1px solid var.$dark-bg-end; }
-    
-    &:last-of-type {
-      border-bottom: 0;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid;
+    .layout.light & { border-color: var.$light-border; }
+    .layout.dark & { border-color: var.$dark-border; }
+
+    opacity: 0;
+    animation: fade-slide-in 0.4s ease-out forwards;
+    @for $i from 1 through 10 { &:nth-child(#{$i}) { animation-delay: #{$i * 0.04}s; } }
+
+    &:last-of-type { border-bottom: 0; }
+    &:nth-child(even) {
+        .layout.light & { background-color: $admin-light-bg; }
+        .layout.dark & { background-color: color.adjust($admin-card-bg-dark, $lightness: 3%); }
+    }
+    &:hover {
+        .layout.light & { background-color: darken($admin-light-bg, 3%); }
+        .layout.dark & { background-color: color.adjust($admin-card-bg-dark, $lightness: 7%); }
     }
   }
+
+  // --- Styles for Actions Column ---
+  .actions-column-header {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+  }
+  .actions-column {
+    padding-right: 1.5rem;
+    text-align: right;
+  }
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+
+    // Style action buttons
+    .btn { // Target the Button component's class
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      opacity: 1; // Ensure visible
+      visibility: visible; // Ensure visible
+      display: inline-flex; // Ensure visible
+
+      // Adjust colors specifically for actions if needed
+      &.btn--danger { /* keep previous danger styles */ }
+      &.btn--secondary { /* keep previous secondary styles */ }
+    }
+     .btn--danger {
+       background-color: transparent; border-color: transparent; color: #e74c3c; opacity: 0.7;
+       &:hover { background-color: rgba(#e74c3c, 0.1); opacity: 1; color: #e74c3c; transform: none; box-shadow: none; }
+    }
+     .btn--secondary { // Edit button
+       background-color: transparent; border-color: transparent; color: $admin-primary-color; opacity: 0.7;
+        &:hover { background-color: rgba($admin-primary-color, 0.1); opacity: 1; color: $admin-primary-color; transform: none; box-shadow: none; }
+    }
+  }
+
+  // --- Empty State ---
+  .empty-state { /* keep as is */ }
 }
 
-// Responsive: Stack table on mobile
+// Responsive
 @media (max-width: 768px) {
+  .data-table-wrapper { /* keep as is */ }
   .data-table {
-    thead { display: none; } // Hide headers
-    
-    tr {
-      display: block;
-      margin-bottom: 1rem;
-    }
-    
-    td {
-      display: flex;
-      justify-content: space-between;
-      text-align: right;
-      border-bottom: 1px dotted;
+    thead { display: none; }
+    tr { /* keep as is */ }
+    td { /* keep as is */
+       // --- Ensure Mobile TD color ---
+       .layout.light & { border-color: var.$light-border; color: $admin-text-light; } // Dark text
+       .layout.dark & { border-color: var.$dark-border; color: $admin-text-dark; }   // Light text
 
-      .layout.light & { border-color: #ddd; }
-      .layout.dark & { border-color: var.$dark-clay-bg; }
-      
-      &::before {
-        content: attr(data-label);
-        font-weight: 600;
-        text-align: left;
-        padding-right: 1rem;
-      }
+       &.actions-column { /* keep as is */ }
+       .action-buttons { /* keep as is */ }
     }
   }
 }

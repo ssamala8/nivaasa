@@ -1,0 +1,183 @@
+@use '../../styles/variables' as var;
+@use '../../styles/mixins' as mix;
+@use "sass:color";
+
+// --- Use the light orange accent ---
+$admin-primary-color: var.$primary-color; // Light Orange
+$admin-light-bg: #fdfdfd; // Match light theme bg
+$admin-dark-bg: #1e1e1e; // Match dark theme card bg (or choose another dark)
+$admin-card-bg-light: #ffffff;
+$admin-card-bg-dark: #2a2a2a; // Slightly lighter dark card
+// --- VERIFY THESE ARE CORRECT ---
+$admin-text-light: var.$light-text; // This should be your DARK text color (e.g., #212529)
+$admin-text-dark: var.$dark-text;   // This should be your LIGHT text color (e.g., #e0e0e0)
+// --- END VERIFY ---
+
+
+@keyframes slide-in-left {
+  from { transform: translateX(-10px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.admin-layout {
+  display: flex;
+  margin: -2rem; // Keep filling main padding on desktop
+  min-height: calc(100vh - 77px); // Adjust based on your header height
+
+  .layout.light & { background-color: $admin-light-bg; }
+  .layout.dark & { background-color: $admin-dark-bg; }
+}
+
+.admin-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var.$base-transition, box-shadow var.$base-transition;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+
+  .layout.light & {
+    background-color: $admin-card-bg-light;
+    border-right: 1px solid var.$light-border;
+  }
+  .layout.dark & {
+    background-color: $admin-card-bg-dark;
+    border-right: 1px solid var.$dark-border;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid;
+    .layout.light & { border-color: var.$light-border; }
+    .layout.dark & { border-color: var.$dark-border; }
+
+    h3 { margin: 0; font-size: 1.25rem; text-align: center; font-weight: 600; }
+  }
+
+  .sidebar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0;
+
+    li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.5rem;
+      margin: 0.25rem 0.75rem;
+      text-decoration: none;
+      font-weight: 500;
+      // --- Explicitly set base text color for sidebar links ---
+      .layout.light & { color: $admin-text-light; }
+      .layout.dark & { color: $admin-text-dark; }
+      opacity: 0.8;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: var.$base-radius;
+      position: relative;
+
+      // Keep slide-in for desktop
+      animation: slide-in-left 0.4s ease-out backwards;
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
+      }
+
+      svg { width: 20px; text-align: center; margin-right: 0.25rem; transition: transform 0.2s ease;}
+
+      &:hover {
+        opacity: 1;
+        background-color: rgba($admin-primary-color, 0.08);
+        color: $admin-primary-color;
+        transform: translateX(3px);
+        svg { transform: scale(1.1); }
+      }
+
+      &.active {
+        opacity: 1;
+        font-weight: 600;
+        color: #fff;
+        background-color: $admin-primary-color;
+        box-shadow: 0 4px 12px rgba($admin-primary-color, 0.4);
+        transform: translateX(0);
+      }
+    }
+  }
+}
+
+.admin-content {
+  flex-grow: 1;
+  padding: 2.5rem;
+  overflow-y: auto;
+  // --- MOST IMPORTANT PART ---
+  // Apply the correct text color directly to the content area
+  .layout.light & { color: $admin-text-light !important; } // Use dark text variable, !important for safety
+  .layout.dark & { color: $admin-text-dark !important; }   // Use light text variable, !important for safety
+  // --- END IMPORTANT PART ---
+}
+
+
+// --- Responsive - HORIZONTAL SCROLL ---
+@media (max-width: 900px) {
+  .admin-layout {
+    flex-direction: column; // Stack sidebar and content vertically
+    margin: 0; // Reset margin
+  }
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row; // Make it a row
+    overflow-x: auto; // Allow horizontal scroll
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); // Keep shadow
+    border-right: none; // Remove side border
+    border-bottom: 1px solid; // Add bottom border
+    order: 1; // Show sidebar first
+
+    .layout.light & { border-color: var.$light-border; }
+    .layout.dark & { border-color: var.$dark-border; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+    .sidebar-header { display: none; } // Hide header
+    .sidebar-nav {
+      display: flex; // Make nav items flex in a row
+      padding: 0.5rem; // Adjust padding
+      width: max-content; // Allow nav to exceed screen width
+    }
+
+    li a {
+      margin: 0.25rem; // Adjust margin
+      padding: 0.75rem 1rem; // Adjust padding
+      border-radius: var.$base-radius;
+      animation: none; // Disable animation
+
+      // --- Ensure mobile link colors are correct ---
+      .layout.light & { color: $admin-text-light; }
+      .layout.dark & { color: $admin-text-dark; }
+
+      // Keep icon, hide text for space
+      span { display: none; }
+      svg { margin-right: 0; }
+
+      // Active state styling for horizontal
+      &.active {
+        background-color: rgba($admin-primary-color, 0.1);
+        color: $admin-primary-color;
+        box-shadow: none;
+        border-bottom: 3px solid $admin-primary-color; // Keep bottom border indicator
+        border-radius: 0;
+      }
+       &:hover {
+         background-color: rgba($admin-primary-color, 0.08);
+         transform: none;
+         svg { transform: none; }
+      }
+    }
+  }
+  .admin-content {
+    padding: 1.5rem; // Keep content padding
+    order: 2; // Show content after sidebar
+    flex-grow: 1; // Make sure content takes remaining vertical space
+    // --- Also ensure color is correct on mobile ---
+    .layout.light & { color: $admin-text-light !important; }
+    .layout.dark & { color: $admin-text-dark !important; }
+    // --- END FIX ---
+  }
+}

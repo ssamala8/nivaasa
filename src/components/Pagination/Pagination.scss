@@ -1,0 +1,103 @@
+@use '../../styles/variables' as var;
+
+.pagination-nav {
+  display: flex;
+  justify-content: center; // Center pagination controls
+  margin-top: var.$base-margin * 1.5; // Space above pagination
+  padding: var.$base-padding 0;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: var.$base-radius;
+  overflow: hidden; // Clip child borders
+
+  .layout.light & { box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+  .layout.dark & { box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+}
+
+.page-item {
+  // Styles for each list item (optional, can style links directly)
+}
+
+.page-link {
+  display: block;
+  padding: 0.6rem 0.9rem;
+  min-width: 40px; // Ensure consistent width
+  text-align: center;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+
+  // Theme-specific background/border/text
+  .layout.light & {
+    color: var.$light-text;
+    border-color: var.$light-border;
+    background-color: var.$light-card-bg;
+  }
+  .layout.dark & {
+    color: var.$dark-text;
+    border-color: var.$dark-border;
+    background-color: var.$dark-card-bg;
+  }
+
+  // Add border between items (except first)
+  &:not(:first-child) {
+      .layout.light & { border-left: 1px solid var.$light-border; }
+      .layout.dark & { border-left: 1px solid var.$dark-border; }
+  }
+
+
+  // Hover state (non-active, non-disabled)
+  .page-item:not(.active):not(.disabled) &:hover {
+    background-color: rgba(var.$primary-color, 0.1);
+    color: var.$primary-color;
+    z-index: 2; // Bring hovered item forward
+  }
+
+  // Ellipsis style
+  &.ellipsis {
+    cursor: default;
+    padding: 0.6rem 0.5rem; // Less padding for ellipsis
+  }
+}
+
+// Active page style
+.page-item.active .page-link {
+  background-color: var.$primary-color;
+  color: #fff;
+  border-color: var.$primary-color;
+  z-index: 3; // Active page on top
+  cursor: default;
+}
+
+// Disabled state
+.page-item.disabled .page-link {
+  opacity: 0.6;
+  cursor: not-allowed;
+  &:hover { // Prevent hover effect on disabled
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+// Responsive adjustments for smaller screens
+@media (max-width: 500px) {
+    .page-link {
+        padding: 0.5rem 0.6rem;
+        min-width: 32px;
+        font-size: 0.8rem;
+    }
+    // Optionally hide ellipsis/first/last on very small screens
+    .page-link.ellipsis,
+    .pagination li:nth-child(2), // Hide "1" if start ellipsis shown
+    .pagination li:nth-last-child(2) { // Hide last page if end ellipsis shown
+        // display: none;
+    }
+}

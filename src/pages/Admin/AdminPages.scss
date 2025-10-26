@@ -1,0 +1,166 @@
+@use '../../styles/variables' as var;
+@use "sass:color";
+
+// --- Admin Specific Variables (Overrides) ---
+$admin-primary-color: var.$primary-color; // Use the global primary color
+$admin-card-bg-light: #ffffff;
+$admin-card-bg-dark: #2a2a2a; // Slightly lighter dark card
+$admin-text-light: var.$light-text;
+$admin-text-dark: var.$dark-text;
+
+// --- Shared Page Header ---
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid;
+  .layout.light & { border-color: var.$light-border; }
+  .layout.dark & { border-color: var.$dark-border; }
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.table-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+// --- Shared Form Styles ---
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid;
+      border-radius: var.$base-radius;
+      font-size: 1rem;
+      transition: all 0.2s ease-out;
+
+      .layout.light & {
+        background-color: #fff;
+        border-color: var.$light-border;
+        &:focus {
+          border-color: $admin-primary-color;
+          box-shadow: 0 0 0 3px rgba($admin-primary-color, 0.15);
+          outline: none;
+        }
+      }
+      .layout.dark & {
+        background-color: color.adjust($admin-card-bg-dark, $lightness: 5%);
+        border-color: var.$dark-border;
+        color: $admin-text-dark;
+        &:focus {
+          border-color: $admin-primary-color;
+          box-shadow: 0 0 0 3px rgba($admin-primary-color, 0.25);
+          outline: none;
+        }
+      }
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+
+  .btn {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+// --- Specific Page Layouts ---
+.split-form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 1.5rem;
+  background-color: transparent !important; // Override card background if needed
+  box-shadow: none !important; // Override card shadow
+  padding: 0 !important; // Override card padding
+
+  .form-group { flex-grow: 1; margin-bottom: 0; } // Remove margin
+
+  .btn { align-self: stretch; }
+
+  @media (max-width: 700px) { // Adjust breakpoint
+    flex-direction: column;
+    align-items: stretch;
+    .btn { align-self: auto; } // Reset alignment
+  }
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Admin Overview Specific
+.admin-stats {
+  display: grid; // Use grid for better alignment
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem 2rem;
+
+  span {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    opacity: 0.8;
+    strong {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: $admin-primary-color;
+    }
+  }
+}
+
+// Add padding to dashboard cards used in admin pages
+.admin-content .dashboard-card {
+  padding: 1.5rem;
+}
+
+
+// --- Responsive Adjustments for Admin Page Header Button ---
+@media (max-width: 768px) { // Target mobile screens
+  .admin-page-header {
+    // Optional: stack title and button
+    // flex-direction: column;
+    // align-items: flex-start;
+    // gap: 1rem;
+
+    // Adjust the button size directly
+    .btn {
+      padding: 0.5rem 1rem; // Smaller padding
+      font-size: 0.85rem; // Smaller font size
+      // Optional: make it full width if stacked
+      // width: 100%;
+      // text-align: center;
+    }
+  }
+}
