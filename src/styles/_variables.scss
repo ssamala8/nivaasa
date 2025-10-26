@@ -1,20 +1,29 @@
-// --- NEW "SUNRISE" COLOR PALETTE ---
-$primary-color: #ff7f50; // Warm Coral
-$primary-color-dark: #ff6347; // Tomato
+// --- Primary Color Palette (Orange Accent ONLY) ---
+$primary-color: #FFA07A;      // Light Salmon / Orange (Used SPARINGLY)
+$primary-color-dark: #FF7F50; // Coral (For button hover)
 
-// --- Light Theme (Sunrise) ---
-$light-bg-start: #fff0f5; // Lavender Blush
-$light-bg-end: #e6f7ff;   // Light Sky Blue
-$light-clay-bg: #ffffff;
-$light-text: #2c3e50;
+// --- Light Theme (Pure White & Black - UNCHANGED) ---
+$light-bg-start: #ffffff;      // White
+$light-bg-end: #f8f9fa;        // Very Light Grey (Subtle Gradient)
+$light-bg: #ffffff;           // Solid White
+$light-card-bg: #ffffff;      // White cards
+$light-text: #212529;          // Near Black text
+$light-border: #dee2e6;        // Standard light border
 
-// --- Dark Theme (Deep Ocean) ---
-$dark-bg-start: #0f2027; // Deep Navy
-$dark-bg-end: #203a43;   // Dark Cyan
-$dark-clay-bg: #2c3e50; // Muted Dark Blue
-$dark-text: #f0f4f8;
+// --- NEW Dark Theme (Warmer Greys & Orange Accent) ---
+$dark-bg-start: #4B4B4B;       // Medium-Dark Grey (Warmer)
+$dark-bg-end: #3C3C3C;         // Dark Grey (Warmer)
+$dark-bg: #454545;             // Solid Warm Dark Grey background
+$dark-card-bg: #5A5A5A;        // Lighter Warm Grey for cards
+$dark-text: #EDEDED;           // Light Grey/Off-white text (Slightly brighter)
+$dark-border: #707070;         // Medium Grey border
 
-// --- Claymorphism Shadows ---
-// This creates the soft 3D effect
-$clay-shadow-light: 5px 5px 10px #d9d9d9, -5px -5px 10px #ffffff;
-$clay-shadow-dark: 5px 5px 10px #223140, -5px -5px 10px #364b60;
+// --- Base Units ---
+$base-padding: 1rem;
+$base-margin: 1rem;
+$base-radius: 8px;
+$base-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// --- Claymorphism Shadows (Updated Dark Shadow) ---
+$clay-shadow-light: 4px 4px 8px #ebebeb, -4px -4px 8px #ffffff; // Very subtle light shadow
+$clay-shadow-dark: 4px 4px 8px #2A2A2A, -4px -4px 8px #6B6B6B; // Adjusted dark shadow

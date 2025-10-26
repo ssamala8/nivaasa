@@ -1,0 +1,224 @@
+// src/pages/Admin/AdminPages.scss
+
+@use '../../styles/variables' as var;
+@use "sass:color";
+
+// --- Admin Specific Variables (Overrides) ---
+// Define admin-specific colors, falling back to global vars
+$admin-primary-color: var.$primary-color;
+$admin-card-bg-light: var.$light-card-bg; // Use global light card bg
+$admin-card-bg-dark: var.$dark-card-bg;   // Use global dark card bg
+$admin-text-light: var.$light-text;     // Use global light theme text
+$admin-text-dark: var.$dark-text;       // Use global dark theme text
+
+// --- Shared Page Header ---
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid;
+  .layout.light & { border-color: var.$light-border; }
+  .layout.dark & { border-color: var.$dark-border; }
+}
+
+h1 { // Applies to page titles like "Flat Management"
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.table-title { // Used above DataTables if needed
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+// --- Shared Form Styles (Used in Modals) ---
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      // Ensure label color contrasts with modal background
+      .layout.light & { color: var.$light-text; }
+      .layout.dark & { color: var.$dark-text; }
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid;
+      border-radius: var.$base-radius;
+      font-size: 1rem;
+      transition: all 0.2s ease-out;
+
+      // Input styling for light mode
+      .layout.light & {
+        background-color: #fff; // White input bg
+        border-color: var.$light-border; // Light border
+        color: var.$light-text; // Dark text
+        &:focus {
+          border-color: $admin-primary-color; // Orange focus border
+          box-shadow: 0 0 0 3px rgba($admin-primary-color, 0.15);
+          outline: none;
+        }
+      }
+      // Input styling for dark mode
+      .layout.dark & {
+        // Use a slightly lighter background than the modal bg for inputs
+        background-color: color.adjust($admin-card-bg-dark, $lightness: 5%); // Lighter dark card bg
+        border-color: var.$dark-border; // Dark border
+        color: $admin-text-dark; // Light text
+        &:focus {
+          border-color: $admin-primary-color; // Orange focus border
+          box-shadow: 0 0 0 3px rgba($admin-primary-color, 0.25);
+          outline: none;
+        }
+      }
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+
+  // Align button in forms (usually within modals)
+  .btn {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+// --- Specific Page Layouts ---
+
+// Layout for Payment page's split form
+.split-form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 1.5rem;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+
+  .form-group { flex-grow: 1; margin-bottom: 0; }
+  .btn { align-self: stretch; }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: stretch;
+    .btn { align-self: auto; }
+  }
+}
+
+// Layout for Community page forms
+.community-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Layout for Admin Overview stats
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem 2rem;
+
+  span { // This refers to the container within the grid item
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    opacity: 0.8;
+    strong { // This is the large number
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: $admin-primary-color; // Orange color for stats
+    }
+  }
+}
+
+// Ensure DashboardCards used within admin pages have consistent padding
+.admin-content .dashboard-card {
+  padding: 1.5rem;
+}
+
+
+// --- Responsive Adjustments for Admin Page Header Button ---
+@media (max-width: 768px) {
+  .admin-page-header {
+    // Make title and button stack if needed, adjust alignment/gap
+    // flex-direction: column;
+    // align-items: flex-start;
+    // gap: 1rem;
+
+    // Adjust button size
+    .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// --- Styles for Apartment Management List ---
+.apartments-list {
+  display: grid;
+  grid-template-columns: 1fr; // Default to 1 column
+  gap: var.$base-margin * 1.5; // Use base variable for gap
+
+  @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr); // 2 columns on medium screens
+  }
+   @media (min-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr); // 3 columns on large screens
+  }
+}
+
+.apartment-card {
+  // Inherits base styles from .dashboard-card
+  p {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+
+    strong {
+      margin-right: 0.5rem;
+      opacity: 0.7;
+      min-width: 80px; // Align labels
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+  }
+}
+
+// --- Loading/Error Styles ---
+// Ensure these are defined for feedback within admin pages
+.dashboard-loading, .dashboard-error {
+  text-align: center;
+  padding: 3rem;
+  opacity: 0.8;
+  width: 100%; // Ensure it takes full width if needed
+
+  // Ensure text color contrasts correctly
+  .layout.light & { color: var.$light-text; }
+  .layout.dark & { color: var.$dark-text; }
+}

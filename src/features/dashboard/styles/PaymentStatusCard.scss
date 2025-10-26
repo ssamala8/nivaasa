@@ -1,4 +1,5 @@
 @use '../../../styles/variables' as var;
+@use "sass:color"; // Keep this if using color functions
 
 .payment-card {
   .payment-status {
@@ -12,21 +13,16 @@
   .status-text h4 {
     margin: 0;
   }
+
+  // Styles specific to the button *within* this card
   .pay-now-button {
+    // We don't need @extend here if Button.js applies .btn and .btn--primary
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.75rem; // Adjust padding if needed
     margin-top: 1.5rem;
-    border: none;
-    border-radius: 8px;
-    background-color: var.$primary-color;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    &:hover {
-      background-color: var.$primary-color-dark;
-    }
+    font-size: 1rem; // Adjust font size if needed
   }
+
   &--paid .status-icon { color: #2ecc71; }
   &--pending .status-icon { color: #f39c12; }
 }

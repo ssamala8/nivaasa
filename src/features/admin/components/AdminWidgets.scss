@@ -1,0 +1,192 @@
+// src/features/admin/components/AdminWidgets.scss
+@use '../../../styles/variables' as var;
+@use '../../../styles/mixins' as mix;
+@use "sass:color"; // Use color module
+
+// --- Shared Widget Styles ---
+.admin-stats-widget, .payment-chart-widget, .payment-list-widget, .queries-widget {
+    // Add animation from mixin
+    @include mix.fade-in-up(0.5s);
+    // Ensure card height consistency if needed, e.g., in a grid row
+    height: 100%;
+    display: flex;
+    flex-direction: column; // Allow content like lists to grow
+
+    // Style the empty state message consistently
+    .empty-state {
+        text-align: center;
+        opacity: 0.7;
+        padding: 1rem 0;
+        font-style: italic;
+        font-size: 0.9rem;
+    }
+}
+
+// --- Admin Stats Widget ---
+.admin-stats-widget {
+  .stats-grid {
+    display: grid;
+    // Responsive columns: 2 on small, 4 on medium+
+    grid-template-columns: repeat(2, 1fr);
+    @media (min-width: 500px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    gap: 1.5rem;
+    padding-top: 0.5rem;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center; // Center text in stats block
+  }
+  .stat-label {
+    font-size: 0.85rem; // Slightly smaller label
+    opacity: 0.7;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase; // Uppercase label
+    letter-spacing: 0.5px;
+  }
+  .stat-value {
+    font-size: 2rem; // Larger value
+    font-weight: 700; // Bolder value
+    color: var.$primary-color; // Use accent color
+
+    &--warning {
+       color: #f39c12; // Orange/Yellow for pending
+    }
+  }
+}
+
+// --- Payment Chart Widget ---
+.payment-chart-widget {
+   // Ensure card title uses theme text color
+   .dashboard-card__title {
+      .layout.light & { color: var.$light-text; }
+      .layout.dark & { color: var.$dark-text; }
+   }
+   .chart-container {
+       height: 280px; // Slightly taller chart
+       width: 100%;
+       max-width: 320px; // Limit max width
+       margin: 1rem auto 0 auto; // Center chart
+   }
+   // Override Chart.js legend color based on theme
+   .layout.light & {
+       .chartjs-legend li span { color: var.$light-text !important; }
+   }
+    .layout.dark & {
+       .chartjs-legend li span { color: var.$dark-text !important; }
+   }
+}
+
+// --- Payment List Widget ---
+.payment-list-widget {
+  // Allow list to take available space
+  display: flex;
+  flex-direction: column;
+
+  .payment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto; // Allow scroll
+    flex-grow: 1; // Take remaining space
+    // Add subtle scrollbar
+    &::-webkit-scrollbar { width: 5px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    .layout.dark &::-webkit-scrollbar-thumb { background: var.$dark-border; }
+  }
+  .payment-item {
+    display: grid;
+    // Adjust grid for better spacing
+    grid-template-columns: minmax(60px, auto) 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.8rem 0.25rem; // Adjust padding
+    border-bottom: 1px solid;
+    transition: background-color 0.2s ease;
+
+    .layout.light & { border-color: var.$light-border; }
+    .layout.dark & { border-color: var.$dark-border; }
+    &:last-child { border-bottom: none; }
+
+    &:hover { // Add subtle hover
+        .layout.light & { background-color: rgba(var.$primary-color, 0.03); }
+        .layout.dark & { background-color: rgba(var.$primary-color, 0.05); }
+    }
+  }
+  .flat-number { font-weight: 500; white-space: nowrap; }
+  .payment-amount { font-size: 0.9rem; opacity: 0.8; text-align: right; }
+  .payment-status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem; // Smaller status text
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    white-space: nowrap; // Prevent wrapping
+  }
+  .status-icon { font-size: 0.75rem; }
+
+  // Status Colors (keep as is)
+  .status-paid { background-color: rgba(#16a085, 0.1); color: #16a085; .status-icon { color: #16a085; } }
+  .status-pending { background-color: rgba(#f39c12, 0.1); color: #f39c12; .status-icon { color: #f39c12; } }
+  .status-na { background-color: rgba(#bdc3c7, 0.1); color: #7f8c8d; .status-icon { color: #7f8c8d; } }
+}
+
+// --- Queries Widget ---
+.queries-widget {
+  display: flex;
+  flex-direction: column;
+
+  .query-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; // Slightly tighter spacing
+    flex-grow: 1; // Allow list to grow
+  }
+  .query-item {
+     display: grid; // Use grid for alignment
+     grid-template-columns: auto 1fr auto auto; // Flat | Subject | Date | Status
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.6rem 0.25rem; // Adjust padding
+     font-size: 0.9rem;
+     border-bottom: 1px solid;
+     .layout.light & { border-color: var.$light-border; }
+     .layout.dark & { border-color: var.$dark-border; }
+     &:last-child { border-bottom: none; }
+  }
+  .query-flat { font-weight: 500; white-space: nowrap; }
+  .query-subject { opacity: 0.9; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; } // Truncate long subjects
+  .query-date { font-size: 0.8rem; opacity: 0.7; white-space: nowrap; }
+  .query-status {
+      font-size: 0.75rem; // Smaller status badge
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      text-transform: uppercase; // Uppercase status
+
+      &.status-open { background-color: rgba(#e74c3c, 0.1); color: #c0392b; }
+      &.status-resolved { background-color: rgba(#2ecc71, 0.1); color: #27ae60; }
+      &.status-in-progress { background-color: rgba(#3498db, 0.1); color: #2980b9; } // Example for 'in progress'
+  }
+
+  .view-all-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem; // Space above link
+    padding-top: 1rem; // Add padding above link (optional border)
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-top: 1px solid; // Separator line above link
+    .layout.light & { border-color: var.$light-border; }
+    .layout.dark & { border-color: var.$dark-border; }
+  }
+}

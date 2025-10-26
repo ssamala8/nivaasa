@@ -1,35 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import './DashboardPage.scss';
-
-// Import our two different dashboard views
-import UserDashboard from '../../features/dashboard/UserDashboard';
-import AdminDashboard from '../../features/admin/AdminDashboard';
+import { Navigate } from 'react-router-dom';
+import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 
 const DashboardPage = () => {
   const { user } = useSelector(state => state.auth);
 
-  return (
-    <div className="dashboard-page">
-      <div className="welcome-header">
-        <h1>Welcome, {user?.name}!</h1>
-        {user?.role === 'admin' ? (
-          <p>Welcome to the Admin Management Panel.</p>
-        ) : (
-          <p>Here is your overview for today.</p>
-        )}
-      </div>
+  if (!user) {
+    return <LoadingOverlay />; // Wait for user to be loaded
+  }
 
-      <div className="dashboard-grid">
-        {user?.role === 'admin' ? (
-          <AdminDashboard />
-        ) : (
-          <UserDashboard /> 
-          // This will show for 'owner' or 'tenant'
-        )}
-      </div>
-    </div>
-  );
+  // Redirect based on role
+  if (user.role === 'admin') {
+    return <Navigate to="/admin/overview" replace />;
+  }
+  
+  // For 'owner' or 'tenant'
+  return <Navigate to="/my-dashboard" replace />;
 };
 
 export default DashboardPage;

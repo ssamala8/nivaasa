@@ -2,14 +2,18 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+const ProtectedRoute = ({ children, role }) => {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const location = useLocation();
 
   if (!isAuthenticated) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to. This allows us to send them back after login.
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // New: Check for a specific role if required
+  if (role && user.role !== role) {
+    // If user is not an admin, send them to their own dashboard
+    return <Navigate to="/my-dashboard" replace />;
   }
 
   return children;

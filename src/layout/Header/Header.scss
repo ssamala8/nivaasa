@@ -1,5 +1,6 @@
 @use '../../styles/variables' as var;
 @use '../../styles/mixins' as mix;
+@use "sass:color";
 
 $breakpoint-mobile: 768px;
 
@@ -7,51 +8,112 @@ $breakpoint-mobile: 768px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  background: transparent;
+  padding: var.$base-padding * 1.5 var.$base-padding * 2;
   position: sticky;
   top: 0;
   z-index: 100;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color var.$base-transition, box-shadow var.$base-transition;
 
-  .logo {
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: inherit;
+  .layout.light & {
+    background-color: var.$light-card-bg;
+    color: var.$light-text;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  }
+  .layout.dark & {
+    background-color: var.$dark-card-bg;
+    color: var.$dark-text;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 
-  .app-header__links {
+  .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: color var.$base-transition;
+
+    .layout.light & { color: var.$primary-color-dark; }
+    .layout.dark & { color: inherit; }
+  }
+
+  .app-header__menu {
     display: flex;
     align-items: center;
-    nav {
-      a {
-        color: inherit;
-        margin: 0 1rem;
-        font-weight: 500;
-        transition: color 0.2s;
-        &:hover {
-          color: var.$primary-color;
-          text-decoration: none;
-        }
+    width: 100%;
+    justify-content: space-between;
+    margin-left: var.$base-margin * 2;
+  }
+
+  .app-header__nav {
+    flex-grow: 1;
+    text-align: center;
+
+    a {
+      color: inherit;
+      margin: 0 var.$base-margin * 1.2;
+      font-weight: 500;
+      transition: color 0.2s ease, transform 0.2s ease;
+      display: inline-block;
+
+      &:hover {
+        color: var.$primary-color;
+        text-decoration: none;
+        transform: translateY(-1px);
       }
     }
   }
 
+  .app-header__actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var.$base-margin * 1.2;
+
+    .app-header__action-link {
+      color: inherit;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      &:hover {
+        color: var.$primary-color;
+        text-decoration: none;
+      }
+    }
+
+    // Specific styles for the button *link* if needed, but rely on classes
+    .app-header__action-button {
+      // We don't need @extend .btn or .btn--primary here
+      // The Link component in Header.js already has these classes
+      padding: 0.5rem 1rem; // Keep specific size
+      border-radius: 20px;
+      font-size: 0.9rem;
+
+      &:hover {
+        transform: scale(1.05) translateY(-1px);
+      }
+    }
+
+    .welcome-user {
+      opacity: 0.8;
+      white-space: nowrap;
+      margin: 0 0.5rem;
+      color: inherit;
+      font-size: 0.9rem;
+    }
+  }
+
   .theme-toggle {
-    .layout.light & { @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light); }
-    .layout.dark & { @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark); }
+    .layout.light & { @include mix.clay-effect(var.$light-card-bg, var.$clay-shadow-light); }
+    .layout.dark & { @include mix.clay-effect(var.$dark-card-bg, var.$clay-shadow-dark); }
     border: none;
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
     cursor: pointer;
     @include mix.flex-center;
     transition: all 0.2s ease;
-    margin-left: 1rem;
     color: var.$primary-color;
 
-    &:hover { transform: scale(1.1); }
+    &:hover { transform: scale(1.1) rotate(15deg); }
     &:active { transform: scale(0.95); }
   }
 
@@ -62,57 +124,77 @@ $breakpoint-mobile: 768px;
     color: inherit;
     font-size: 1.5rem;
     cursor: pointer;
-    z-index: 10;
+    z-index: 101;
+    padding: 0.5rem;
   }
 
-  .welcome-user {
-    margin: 0 1rem;
-    opacity: 0.8;
-  }
-  
-  .logout-link {
-    cursor: pointer;
-    font-weight: 500;
-    color: var.$primary-color !important;
-  }
-
+  // --- Mobile Styles ---
   @media (max-width: $breakpoint-mobile) {
-    .mobile-toggle { display: block; }
+    padding: var.$base-padding var.$base-padding * 1.5;
 
-    .app-header__links {
+    .mobile-toggle { display: block; }
+    .logo { order: 1; font-size: 1.4rem; }
+    .mobile-toggle { order: 2; }
+    .app-header__menu { order: 3; }
+
+    .app-header__menu {
       display: none;
       position: absolute;
-      top: 90%;
-      left: 2.5%;
-      width: 95%;
-      .layout.light & { @include mix.clay-effect(var.$light-clay-bg, var.$clay-shadow-light); }
-      .layout.dark & { @include mix.clay-effect(var.$dark-clay-bg, var.$clay-shadow-dark); }
-      flex-direction: column;
-      padding: 1.5rem;
-      &.app-header__links--open { display: flex; }
+      top: 100%;
+      left: 0;
+      width: 100%;
+      margin-left: 0;
+      border-radius: 0 0 var.$base-radius var.$base-radius;
 
-      nav {
-        display: flex;
+      .layout.light & {
+        background-color: var.$light-card-bg;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+      .layout.dark & {
+        background-color: var.$dark-card-bg;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+
+      flex-direction: column;
+      align-items: stretch;
+      padding: var.$base-padding * 1.5;
+
+      &.app-header__menu--open { display: flex; animation: slide-down 0.3s ease-out; }
+
+      .app-header__nav,
+      .app-header__actions {
         flex-direction: column;
         align-items: center;
         width: 100%;
-        a {
-          margin: 0.75rem 0;
-          font-size: 1.2rem;
+      }
+
+      .app-header__nav {
+        padding-bottom: var.$base-padding;
+        border-bottom: 1px solid;
+        .layout.light & { border-color: var.$light-border; }
+        .layout.dark & { border-color: var.$dark-border; }
+
+        a { margin: var.$base-margin 0; font-size: 1.1rem; }
+      }
+
+      .app-header__actions {
+        padding-top: var.$base-padding;
+        gap: var.$base-margin * 1.5;
+
+        .app-header__action-button {
+          width: 100%;
+          text-align: center;
+          padding: 0.75rem;
+          font-size: 1rem;
         }
-      }
-      .theme-toggle {
-        margin-left: 0;
-        margin-top: 1rem;
-      }
-      .welcome-user {
-        margin: 0.75rem 0;
-        font-size: 1.1rem;
-      }
-      .logout-link {
-        font-size: 1.2rem;
-        margin: 0.75rem 0;
+         .welcome-user { font-size: 1rem; }
       }
     }
   }
+}
+
+// Mobile menu animation
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

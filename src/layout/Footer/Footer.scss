@@ -2,16 +2,14 @@
 
 .app-footer {
   text-align: center;
-  padding: 2rem;
+  padding: var.$base-padding * 2; // Use base padding
   margin-top: auto;
-  
-  // --- FLOATING FOOTER ---
-  background: transparent;
-  color: inherit; // Inherit from .layout
+  background: transparent; // Keep floating footer for main layout
+  color: inherit;
   font-size: 0.9rem;
   font-weight: 500;
-  
-  // Subtle shadow for readability
-  .layout.light & { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
-  .layout.dark & { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+  opacity: 0.8; // Slightly faded
+
+  .layout.light & { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); }
+  .layout.dark & { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
 }

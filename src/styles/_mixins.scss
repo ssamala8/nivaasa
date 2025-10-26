@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use "sass:color"; // Ensure color module is used
 
 @mixin flex-center {
   display: flex;
@@ -6,24 +7,24 @@
   align-items: center;
 }
 
-// --- NEW CLAY EFFECT MIXIN ---
+// --- REFINED CLAY EFFECT MIXIN ---
 @mixin clay-effect($bg, $shadow) {
   background: $bg;
-  border-radius: 20px;
+  border-radius: var.$base-radius * 1.5; // Slightly more rounded cards
   box-shadow: $shadow;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all var.$base-transition;
 }
 
-// --- NEW AURORA BACKGROUND MIXIN ---
+// --- AURORA BACKGROUND MIXIN ---
 @mixin aurora-gradient($start, $end) {
   background: linear-gradient(135deg, $start, $end);
-  background-size: 400% 400%;
-  animation: moveGradient 15s ease infinite;
+  background-size: 200% 200%; // Slightly slower animation
+  animation: moveGradient 20s ease infinite;
 }
 
-// Reusable animation mixin
+// --- FADE-IN ANIMATION ---
 @mixin fade-in-up($duration: 0.5s, $delay: 0s) {
   animation: fade-in-up $duration ease-out $delay forwards;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(15px); // Slightly less movement
 }
